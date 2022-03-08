@@ -1,0 +1,95 @@
+// C++ code
+int motorPin1 =11;
+int motorPin2 =10;
+int motorPin3 =8;
+int motorPin4 =9;
+
+int IRsensor1 = 7;
+int IRsensor2 = 6;
+
+#define echoPin 13
+#define trigPin 12
+
+int count=0;
+long duration;
+int distance;
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(motorPin1, OUTPUT);
+  pinMode(motorPin2, OUTPUT);
+  pinMode(motorPin3, OUTPUT);
+  pinMode(motorPin4, OUTPUT);
+  pinMode(IRsensor1,INPUT);
+  pinMode(IRsensor2,INPUT);
+  pinMode(trigPin,OUTPUT);
+  pinMode(echoPin,INPUT);
+}
+
+void loop()
+{
+ 
+   
+  digitalWrite(trigPin,LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin,HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin,LOW);
+  
+  duration=pulseIn(echoPin,HIGH);
+  distance=(duration*0.034/2);  
+  
+  Serial.print("Distance : ");
+  Serial.print(distance+count);
+  Serial.print(" cm ");
+  //delay(1000);
+  
+  
+int sensor2  =  digitalRead(IRsensor2);  
+int sensor1  =  digitalRead(IRsensor1);
+
+Serial.print("    ");
+//Serial.print(count);
+Serial.print("IRsensor1: ");
+Serial.print(sensor1);
+Serial.print("  IRsensor2: ");
+Serial.println(sensor2);
+  
+//motor1  
+ if(sensor1==1)
+ {
+digitalWrite(motorPin3,HIGH);
+digitalWrite(motorPin4,LOW);
+}
+  else
+  {
+digitalWrite(motorPin3,LOW);
+digitalWrite(motorPin4,LOW); 
+}
+  
+//motor2  
+ if(sensor2==1)
+ {
+digitalWrite(motorPin1,HIGH);
+digitalWrite(motorPin2,LOW);
+}
+else
+  {
+digitalWrite(motorPin1,LOW);
+digitalWrite(motorPin2,LOW); 
+}
+
+delay(100);
+count=count+1;
+if(count>3)
+{
+  count=count*0;
+  distance=0;
+digitalWrite(motorPin1,LOW);
+digitalWrite(motorPin2,LOW);
+digitalWrite(motorPin3,LOW);
+digitalWrite(motorPin4,LOW);
+Serial.print("Both motor are Stop");
+  delay(5000);
+}  
+}
